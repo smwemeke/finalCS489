@@ -10,6 +10,8 @@ import edu.miu.cse.vsms.repository.VehicleServiceRepository;
 import edu.miu.cse.vsms.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
@@ -21,7 +23,20 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public VehicleServiceResponseDto assignService(ServiceRequestDto request) {
         // Write your code here
+        Employee employee = employeeRepository.findEmployeeById(request.employeeId());
+        VService vService = new VService(
+                request.serviceName(),
+                request.cost(), request.vehicleType(),employee);
+        VService savedVService = vehicleServiceRepository.save(vService);
 
-        return null;
+
+          return new VehicleServiceResponseDto(
+                  //savedVService.getEmployee().
+                  savedVService.getId(),
+                  savedVService.getServiceName(),
+                  savedVService.getCost(),
+                  savedVService.getVehicleType()
+          );
+
     }
 }
